@@ -11,6 +11,8 @@ import re
 import httplib
 import urlparse
 import pprint
+from tld import get_tld
+from tld.utils import update_tld_names
 
 
 
@@ -31,14 +33,18 @@ class StdOutListener(StreamListener):
         print status
 
 def expand_url(url):
-    url_components = urlparse.urlparse(url)
-    h = httplib.HTTPConnection(url_components.netloc)
-    h.request('HEAD', url_components.path)
+    parsed = urlparse.urlparse(url)
+    h = httplib.HTTPConnection(parsed.netloc)
+    resource = parsed.path
+    if parsed.query != "":
+        resource += "?" + parsed.query
+    h.request('HEAD', resource )
     response = h.getresponse()
     if response.status/100 == 3 and response.getheader('Location'):
-        return unshorten_url(response.getheader('Location'))
+        return response.getheader('Location') # changed to process chains of short urls
     else:
-        return url    
+        return url 
+
 
 
 
@@ -63,7 +69,11 @@ if __name__ == '__main__':
     
 
     tweets_data_path = '/vagrant/web/twitter_data.txt'
-
+    domain = []
+    domain_data = []
+    domain_names =[]
+    domain_count = []
+    myurls =[]
     tweets_data = []
     tweets_file = open(tweets_data_path, "r")
     for line in tweets_file:
@@ -75,8 +85,15 @@ if __name__ == '__main__':
 
     for tweet in tweets_data:
         urls=re.findall(r'(https?://\S+)', tweet['text'])
-    
-     print expand_url(urls)
+    for url in urls:
+        myurls.append(expand_url(url))
+        update_tld_names()
+        for url in myurls:
+            domain_data = get_tld(url, as_object=True)
+            domain = "{}.{}".format(domain_data.subdomain, domain_data.tld)
+            domain_names.append(domain)
+    domain_count=Counter(domain_names)
+    print domain_count , myurls
     exit()
     for tweet in tweets_data:
         if tweet['entities']['urls']:
