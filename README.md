@@ -1,9 +1,9 @@
 # Twitter-API 
 Uses the Twitter Streaming API to track a given keyword and generate various reports about the tweets.
 After starting program prints the following reports based on the tweets of last 5 minutes.
-1. User Report
-2. Links Report
-3. Content Report
+	1. User Report
+	2. Links Report
+	3. Content Report
 
 ## Dependency
 - Install Tweepy (Wrapper to Twitter API)
