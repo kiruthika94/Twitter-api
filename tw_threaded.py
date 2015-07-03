@@ -10,7 +10,7 @@ from collections import Counter
 import re
 import httplib
 import urlparse
-import pprint
+#import pprint
 import thread
 import time
 import sys
