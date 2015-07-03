@@ -166,7 +166,7 @@ try:
 	thread.start_new_thread(GetTweets, ("GetTweets", 1 ))
 	thread.start_new_thread(OneMinuteStats, ("OneMinuteStats", 10 ))
 except:
-	print "Error: unable to start thread"
+	print "Error: unable to start thread or a thread failed"
 
 while 1:
 	pass
