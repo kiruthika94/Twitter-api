@@ -1,4 +1,5 @@
 #!/usr/bin/python
+print "Initializing Libraries..."
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
@@ -110,7 +111,7 @@ def OneMinuteStats(threadName, delay):
 				tweet_text = tweet_data['tweet']
 				tweet_text = ''.join(ch for ch in tweet_text if ch not in set(string.punctuation))
 				tweet_text = re.sub(r'\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*', '', tweet_text) # remove url http://stackoverflow.com/a/83378
-				tweet_text_filtered = [word for word in tweet_text.split() if word not in cachedStopWords]
+				tweet_text_filtered = [word for word in tweet_text.split() if word.lower() not in cachedStopWords]
 
 				for word in tweet_text_filtered:
 					word_count[word] += 1
@@ -164,7 +165,7 @@ def OneMinuteStats(threadName, delay):
 
 try:
 	thread.start_new_thread(GetTweets, ("GetTweets", 1 ))
-	thread.start_new_thread(OneMinuteStats, ("OneMinuteStats", 10 ))
+	thread.start_new_thread(OneMinuteStats, ("OneMinuteStats", 60 ))
 except:
 	print "Error: unable to start thread or a thread failed"
 
