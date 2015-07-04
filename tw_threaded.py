@@ -153,7 +153,7 @@ def OneMinuteStats(threadName, delay):
 			print ""
 		if total_words:
 			print "Content Report: "
-			print domain_table.draw()
+			print word_table.draw()
 			print ""
 		if total_words or total_links or total_username:
 			print "=============================="
